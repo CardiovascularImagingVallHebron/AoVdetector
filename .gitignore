@@ -1,0 +1,15 @@
+/data
+/data_3ch
+/data_plax
+/files
+/inference_bicator.py
+/inference_cleaned_good.csv
+/inference_square_good.csv
+/load_resized_boxes.py
+/main.py
+/models
+/runs
+/test.ipynb
+/test2.ipynb
+/valveframes.zip
+/results
