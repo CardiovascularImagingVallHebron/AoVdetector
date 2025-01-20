@@ -9,5 +9,9 @@
 /runs
 /test.ipynb
 /test2.ipynb
+/test3.ipynb
 /valveframes.zip
 /results*
+/inference_tartaglia.py
+/data_tartaglia
+
