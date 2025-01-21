@@ -9,33 +9,21 @@ import csv
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-from src.utils import img_crop_v2
 
 # Ruta del modelo entrenado
 model_path = 'results/20241014_124322/model_epoch_best.pth'
 
 # Rutas de las imágenes
-base_dirs = [r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data\frames', 
-             r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_plax\frames',
-             r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_3ch\frames']
+base_dirs = [r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data\frames_croped\128_128', 
+             r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_plax\frames_croped_plax\128_128',
+             r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_3ch\frames_croped_3ch\128_128']
 
 
 # Subcarpetas
-subfolders = ['12m', '24m', 'basal', 'final']
+subfolders = ['48m'] #['12m', '24m', 'basal', 'final']
 
 # CSV para guardar los resultados
-output_csv = 'inference_cleaned_good.csv'
-
-bad_masks = set()
-with open('badmasks.txt', 'r') as f:
-    for line in f:
-        # Ignorar líneas que no siguen el formato esperado (por ejemplo, encabezados o secciones decorativas)
-        if line.startswith("***") or line.startswith("***********************") or line.strip() == "":
-            continue
-        # Dividir cada línea en columnas y añadirlas al conjunto
-        columns = line.strip().split()
-        if len(columns) == 3:
-            bad_masks.add((columns[0], columns[1], columns[2]))
+output_csv = 'inference_new_48m.csv'
 
 # Etiquetas de las vistas (ajustar si es necesario)
 label_to_view = {1: 'psax_aov', 2: 'plax', 3: '3c'}
@@ -63,14 +51,6 @@ transform = ToTensor()
 def inference_on_image(image_path):
     # Cargar la imagen (npy)
     image_np = np.load(image_path)
-    height, width = image_np.shape
-
-    if height<width:
-        image_np = img_crop_v2(image_np, height, height)
-    else:
-        image_np = img_crop_v2(image_np, width, width)
-
-
     image = Image.fromarray(image_np).resize((256, 256))
     image_tensor = transform(image).unsqueeze(0).to(device)
 
@@ -114,11 +94,11 @@ with open(output_csv, mode='a', newline='') as file:
 
     # Recorrer las subcarpetas y realizar inferencia
     for base_dir in base_dirs:
-        if base_dir == r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data\frames':
+        if base_dir == r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data\frames_croped\128_128':
             data = 'data_psax'
-        elif base_dir == r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_plax\frames':
+        elif base_dir == r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_plax\frames_croped_plax\128_128':
             data = 'data_plax'
-        elif base_dir == r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_3ch\frames':
+        elif base_dir == r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data_3ch\frames_croped_3ch\128_128':
             data = 'data_3ch'
         for subfolder in subfolders:
             subfolder_path = os.path.join(base_dir, subfolder)
@@ -126,7 +106,7 @@ with open(output_csv, mode='a', newline='') as file:
                 patient_path = os.path.join(subfolder_path, patient_folder)
                 for dicom_folder in os.listdir(patient_path):
                     dicom_path = os.path.join(patient_path, dicom_folder)
-                    if os.path.isdir(dicom_path) and (subfolder, patient_folder, dicom_folder) in bad_masks:  # Verificar si es una carpeta
+                    if os.path.isdir(dicom_path):  # Verificar si es una carpeta
                         for frame_file in tqdm(os.listdir(dicom_path)):
                             if frame_file.endswith('.npy'):  # Asumimos que las imágenes son archivos .npy
                                 frame_path = os.path.join(dicom_path, frame_file)
