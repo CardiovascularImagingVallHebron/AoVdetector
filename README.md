@@ -6,7 +6,7 @@ This project aims to detect the **aortic valve** in echocardiogram images for **
 ---
 
 ### Model Performance
-- **Label Match Accuracy:** 92%
+- **Box Match Accuracy:** 92%
 - **View Type Accuracy:** 98%
 
 ---
