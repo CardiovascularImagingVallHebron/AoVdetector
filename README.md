@@ -27,9 +27,3 @@ Below is an example of the model's performance in detecting the aortic valve in 
 For any questions or inquiries, feel free to reach out to Pere Lopez-Gutierrez at pere.lopez@vhir.org.
 
 ---
-
-### Credits and Citation
-
-If you use this code in your research, please cite the following reference:
-
-**Pere Lopez-Gutierrez**, Vall d'Hebron Institut de Recerca (VHIR), Barcelona, Spain. [GitHub Repository](https://github.com/perolope/AoVdetector).
