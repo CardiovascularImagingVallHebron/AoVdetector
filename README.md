@@ -25,5 +25,3 @@ Below is an example of the model's performance in detecting the aortic valve in 
 ### Contact
 
 For any questions or inquiries, feel free to reach out to Pere Lopez-Gutierrez at pere.lopez@vhir.org.
-
----
