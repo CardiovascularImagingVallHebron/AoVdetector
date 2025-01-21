@@ -1,7 +1,7 @@
 # AorticValve Detector
 
 ### Description
-This project aims to detect the **aortic valve** in echocardiogram images for **PLAX**, **PSAX**, and **3CH views**. The detection model is based on a Faster R-CNN architecture using a ResNet-50 backbone. It is pretrained on the COCO dataset (version COCO_V1) for object detection tasks.
+This project aims to detect the **aortic valve** in echocardiogram images for **PLAX**, **PSAX**, and **3C views**. The detection model is based on a Faster R-CNN architecture using a ResNet-50 backbone. It is pretrained on the COCO dataset (version COCO_V1) for object detection tasks.
 
 ---
 
