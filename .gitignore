@@ -18,6 +18,7 @@
 /croped_to_valve_frame_badmasks.py
 /croped_to_valve_frame.py
 
+model_epoch_best.pth
 
 *.txt
 *.pth
