@@ -2,7 +2,6 @@
 /data_3ch
 /data_plax
 /files
-/inference_bicator.py
 /load_resized_boxes.py
 /main.py
 /models
@@ -11,7 +10,14 @@
 /test2.ipynb
 /test3.ipynb
 /valveframes.zip
-/results*
+/results
 /inference_tartaglia.py
 /data_tartaglia
+/inference_badmasks.py
+*.csv
+/croped_to_valve_frame_badmasks.py
+/croped_to_valve_frame.py
 
+
+*.txt
+*.pth
