@@ -18,7 +18,7 @@ from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 # Define paths
 csv_path = 'data/anotaciones_new_converted.csv'
 dataset_path = r'\\NAS3_Z\all\BKP_PERE\echoqual\data\frames_resized\256_256_new'
-masks_path = r'e:\25366074H\Documents\echoqual\data\masks'
+masks_path = r'Documents\echoqual\data\masks'
 
 # Cargar el CSV
 df = pd.read_csv(csv_path)
