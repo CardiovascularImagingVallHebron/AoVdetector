@@ -20,10 +20,12 @@ base_dirs = [r'\\NAS3_Z\all\BKP_PERE\ARQPSAX\data\frames_croped\128_128',
 
 
 # Subcarpetas
-subfolders = ['48m'] #['12m', '24m', 'basal', 'final']
+# subfolders = ['48m'] #['12m', '24m', 'basal', 'final']
+# subfolders = ['12m', '24m']
+subfolders = ['basal', 'final']
 
 # CSV para guardar los resultados
-output_csv = 'inference_new_48m.csv'
+output_csv = 'inference_new_c9.csv'
 
 # Etiquetas de las vistas (ajustar si es necesario)
 label_to_view = {1: 'psax_aov', 2: 'plax', 3: '3c'}
@@ -117,8 +119,11 @@ with open(output_csv, mode='a', newline='') as file:
                                     continue
                                 
                                 # Realizar inferencia
-                                p1, p2, vista = inference_on_image(frame_path)
-
+                                try:
+                                    p1, p2, vista = inference_on_image(frame_path)
+                                except Exception as e:
+                                    print(f'Error en {frame_path}: {e}')
+                                    p1, p2, vista = None, None, None
                                 # Si se obtuvo una predicción válida, guardarla en el CSV
                                 if p1 is not None and p2 is not None:
                                     frame_number = os.path.splitext(frame_file)[0]  # Remover la extensión del archivo
