@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import csv
 
 # Cargar el CSV
-csv_path = r'E:\25366074H\Documents\echoqual\data\tartaglia_db_beta_modified.csv'
+csv_path = r'Documents\echoqual\data\tartaglia_db_beta_modified.csv'
 df = pd.read_csv(csv_path, delimiter=';')
 
 # Archivo donde guardar las anotaciones
