@@ -1,0 +1,4 @@
+echo_id;study_code;UID_study_code;file_name;file_path;pre_tartaglia;training_testing;annotated_by_available;annotated_by;view_annotated;view_annotation;zoom_annotated;zoom_annotation;complete_structures_annotated;complete_structures_annotation;calidad_annotated;calidad_annotation;gating_problem_annotated;gating_problem_annotation;foreshortening_annotated;foreshortening_annotation;LV_segmentation_annotated;LV_segmentation_path
+A000;XXXX;XXXX;XXXX.dcm;XXXX.dcm;0;TR;1;XX;1;plax;1;0.0;1.0;2.0;1.0;1.0;0;;0.0;;0.0;
+A000;XXXX;XXXX;XXXX.dcm;XXXX.dcm;0;TR;1;XX;1;psax_aov;1;0.0;1.0;2.0;1.0;1.0;0;;0.0;;0.0;
+A000;XXXX;XXXX;XXXX.dcm;XXXX.dcm;0;TR;1;XX;1;3c;1;0.0;1.0;2.0;1.0;1.0;0;;0.0;;0.0;

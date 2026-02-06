@@ -1,4 +1,6 @@
-/data
+/data/frames_valve
+/data/videos
+!/data/example.csv
 /data_3ch
 /data_plax
 /files

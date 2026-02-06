@@ -4,53 +4,53 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 
-# Cargar el CSV
-csv_path = r'Documents\echoqual\data\tartaglia_db_beta_modified.csv'
+# Load CSV
+csv_path = 'data\example.csv'
 df = pd.read_csv(csv_path, delimiter=';')
 
-# Archivo donde guardar las anotaciones
+# File to save annotations
 output_csv = 'anotaciones_new.csv'
 
-# Si el archivo de anotaciones no existe, crearlo con el encabezado
+# If the annotations file does not exist, create it with the header
 if not os.path.exists(output_csv):
     with open(output_csv, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['view', 'echo_id', 'frame', '1er clic (x, y)', '2o clic (x, y)'])
 
-# Archivo donde guardar los echo_id descartados
+# File to save discarded echo_ids
 discarded_csv = 'discarded_echo_ids.csv'
 
-# Si el archivo de descartes no existe, crearlo
+# If the discarded file does not exist, create it
 if not os.path.exists(discarded_csv):
     with open(discarded_csv, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['echo_id'])
 
-# Cargar el archivo de anotaciones existentes para verificar duplicados
+# Load the existing annotations file to check for duplicates
 annotated_data = pd.read_csv(output_csv)
 
-# Cargar el archivo de echo_id descartados
+# Load the discarded echo_id file
 discarded_data = pd.read_csv(discarded_csv)
 
-# Filtrar por 'view_annotation'
+# Filter by 'view_annotation'
 valid_views = ['3c', 'plax', 'psax_aov', 'psax']
 filtered_df = df[df['view_annotation'].isin(valid_views)]
 
-# Ruta base donde están las carpetas
-dataset_path = r'\\NAS3_Z\all\BKP_PERE\echoqual\data\frames_resized\256_256_new'
+# Base path where the folders are located
+dataset_path = r'your_path'
 
-# Variables globales para controlar los frames y el estado
+# Global variables to control frames and state
 current_echo_id = None
 npy_files = []
 current_file_index = 0
-first_click = None  # Primer clic de la caja (x, y)
-second_click = None  # Segundo clic de la caja (x, y)
-drawing_box = False  # Indicador de si estamos dibujando la caja
-view = None  # Variable global para almacenar el 'view'
-echo_folder = None  # Variable global para almacenar el directorio del echo_id
-current_index = 0  # Índice global para rastrear el progreso en filtered_df
+first_click = None  # First click of the box (x, y)
+second_click = None  # Second click of the box (x, y)
+drawing_box = False  # Indicator if we are drawing the box
+view = None  # Global variable to store the 'view'
+echo_folder = None  # Global variable to store the echo_id directory
+current_index = 0  # Global index to track progress in filtered_df
 
-# Función para verificar si ya se ha anotado el view y echo_id
+# Function to check if the view and echo_id have already been annotated
 def is_echo_annotated(view, echo_id):
     global annotated_data
     existing_annotations = annotated_data[
@@ -59,32 +59,32 @@ def is_echo_annotated(view, echo_id):
     ]
     return not existing_annotations.empty
 
-# Función para verificar si el echo_id ha sido descartado
+# Function to check if the echo_id has been discarded
 def is_echo_discarded(echo_id):
     global discarded_data
     return not discarded_data[discarded_data['echo_id'] == echo_id].empty
 
-# Cargar el CSV de anotaciones para las cajas p1, p2
+# Load the CSV of annotations for boxes p1, p2
 anotaciones_csv_path = r'data/anotaciones.csv'
 anotaciones_df = pd.read_csv(anotaciones_csv_path)
 
-# Ruta base para el segundo frame
-frames_dataset_path = r'\\NAS3_Z\all\BKP_PERE\echoqual\data\frames'
+# Base path for the second frame
+frames_dataset_path = r'frame_path'
 
-# Función para dibujar el segundo gráfico
+# Function to draw the second plot
 def show_second_frame_with_box():
     global current_file_index, npy_files, current_echo_id, anotaciones_df, frames_dataset_path
 
-    # Filtrar el dataframe de anotaciones para obtener la fila correspondiente
+    # Filter the annotations dataframe to get the corresponding row
     annotation_row = anotaciones_df[
         (anotaciones_df['echo_id'] == current_echo_id)
     ]
 
     if not annotation_row.empty:
-        # Extraer las coordenadas de la caja p1 y p2
+        # Extract the coordinates of the box p1 and p2
         p1 = eval(annotation_row.iloc[0]['1er clic (x, y)'])
         p2 = eval(annotation_row.iloc[0]['2o clic (x, y)'])
-        # Cargar el frame correspondiente del segundo dataset
+        # Load the corresponding frame from the second dataset
         frame_file = f"frame_{annotation_row.iloc[0]['frame']:04d}.npy"
         frame_path = os.path.join(frames_dataset_path, current_echo_id, frame_file)
 
@@ -92,25 +92,24 @@ def show_second_frame_with_box():
             second_frame = np.load(frame_path)
 
             if second_frame.ndim == 2:
-                plt.subplot(1, 2, 2)  # Crear el segundo subplot a la derecha
+                plt.subplot(1, 2, 2)  
                 plt.imshow(second_frame, cmap='gray')
                 frame_name = annotation_row.iloc[0]['frame']
-                plt.title(f'Segundo Frame - Echo ID: {current_echo_id}, Frame: {frame_name}')
+                plt.title(f'Second Frame - Echo ID: {current_echo_id}, Frame: {frame_name}')
                 plt.axis('off')
 
-                # Dibujar la caja en el segundo frame
                 plt.gca().add_patch(plt.Rectangle(p1, p2[0] - p1[0], p2[1] - p1[1], 
                                                   fill=False, edgecolor='red', linewidth=2))
                 plt.draw()
             else:
-                print(f'El frame de {frame_path} no tiene el formato correcto para ser ploteado (debería ser 2D)')
+                print(f'The frame at {frame_path} does not have the correct format to be plotted (should be 2D)')
         else:
-            print(f'No se encontró el frame en la ruta: {frame_path}')
+            print(f'Frame not found at path: {frame_path}')
     else:
-        print(f'No se encontraron anotaciones para echo_id {current_echo_id} y frame {current_file_index}')
+        print(f'No annotations found for echo_id {current_echo_id} and frame {current_file_index}')
 
 
-# Modificación de la función show_frame para incluir el segundo frame con la caja
+# Modification of the show_frame function to include the second frame with the box
 def show_frame():
     global current_file_index, npy_files, first_click, second_click, drawing_box, echo_folder
     
@@ -120,174 +119,173 @@ def show_frame():
 
         if frame.ndim == 2:
             show_second_frame_with_box()
-            plt.subplot(1, 2, 1)  # Crear el primer subplot a la izquierda
+            plt.subplot(1, 2, 1)  
             plt.imshow(frame, cmap='gray')
             plt.title(f'Echo ID: {current_echo_id}, Archivo: {npy_files[current_file_index]}, Vista: {view}')
             plt.axis('off')
             plt.draw()
 
-            # Mostrar el segundo frame con la caja
+            # Show the second frame with the box
         else:
-            print(f'El frame de {npy_files[current_file_index]} no tiene el formato correcto para ser ploteado (debería ser 2D)')
+            print(f'The frame of {npy_files[current_file_index]} does not have the correct format to be plotted (should be 2D)')
     else:
-        print(f'No hay archivos .npy disponibles para mostrar en {current_echo_id}')
+        print(f'No .npy files available to display for {current_echo_id}')
 
-# Evento de pulsación de tecla para avanzar, retroceder, descartar o cancelar el primer clic
+# Key press event to advance, go back, discard, or cancel the first click
 def on_key(event):
     global current_file_index, first_click, second_click, drawing_box, current_echo_id, current_index
     
-    if event.key == 'right':  # Avanzar al siguiente frame con la flecha derecha
+    if event.key == 'right':  # Advance to the next frame with the right arrow
         current_file_index = (current_file_index + 1) % len(npy_files)
-        plt.clf()  # Limpiar la figura actual
+        plt.clf()  # Clear the current figure
         show_frame()
         
-    elif event.key == 'left':  # Retroceder al frame anterior con la flecha izquierda
+    elif event.key == 'left':  # Go back to the previous frame with the left arrow
         current_file_index = (current_file_index - 1) % len(npy_files)
-        plt.clf()  # Limpiar la figura actual
+        plt.clf()  # Clear the current figure
         show_frame()
     
-    elif event.key == 'd':  # Si se pulsa la tecla 'x', descartar el echo y avanzar al siguiente
-        print(f'Echo ID {current_echo_id} descartado, avanzando al siguiente echo.')
-
-        # Guardar el echo_id descartado en el CSV de descartados
+    elif event.key == 'd':  # If the 'd' key is pressed, discard the echo and move to the next one
+        print(f'Echo ID {current_echo_id} discarded, moving to the next echo.')
+        # Save the discarded echo_id to the discarded CSV
         with open(discarded_csv, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([current_echo_id])
         
-        # Actualizar el dataframe de descartados
+        # Update the discarded dataframe
         new_row = pd.DataFrame({'echo_id': [current_echo_id]})
         global discarded_data
         discarded_data = pd.concat([discarded_data, new_row], ignore_index=True)
         
-        # Avanzar al siguiente echo directamente
-        plt.close()  # Cerrar la ventana actual para evitar problemas visuales
-        advance_to_next_echo()  # Llamar a la función para avanzar
+        # Advance to the next echo directly
+        plt.close()  # Close the current window to avoid visual issues
+        advance_to_next_echo()  # Call the function to advance
     
-    elif event.key == 'escape' and first_click is not None:  # Si se pulsa Escape, restablecer el primer clic
-        print('Primer clic cancelado.')
+    elif event.key == 'escape' and first_click is not None:  # If Escape is pressed, reset the first click
+        print('First click canceled.')
         first_click = None
         drawing_box = False
-        plt.clf()  # Limpiar la figura actual
+        plt.clf()  # Clear the current figure   
         show_frame()
 
-# Evento de clic del mouse para capturar las coordenadas y dibujar la caja
+# Mouse click event to capture coordinates and draw the box
 def on_click(event):
     global first_click, second_click, drawing_box, annotated_data
     
-    if event.inaxes:  # Si el clic está dentro de la imagen
+    if event.inaxes:  # If the click is inside the image
         if first_click is None:
-            # Primer clic (inicio de la caja)
+            # First click (start of the box)
             first_click = (event.xdata, event.ydata)
             drawing_box = True
-            print(f'Primer clic: {first_click}')
+            print(f'First click: {first_click}')
         else:
-            # Segundo clic (final de la caja)
+            # Second click (end of the box)
             second_click = (event.xdata, event.ydata)
-            print(f'Segundo clic: {second_click}')
+            print(f'Second click: {second_click}')
             
-            # Guardar la anotación en el archivo CSV
+            # Save the annotation to the CSV file
             with open(output_csv, mode='a', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow([view, current_echo_id, current_file_index, first_click, second_click])
             
-            # Actualizar el dataframe de anotaciones
+            # Update the annotated dataframe
             new_row = pd.DataFrame({
                 'view': [view], 'echo_id': [current_echo_id], 
                 'frame': [current_file_index], '1er clic (x, y)': [first_click], '2o clic (x, y)': [second_click]
             })
             annotated_data = pd.concat([annotated_data, new_row], ignore_index=True)
             
-            print(f'Anotación guardada: {first_click} a {second_click} en frame {current_file_index}')
+            print(f'Saved annotation: {first_click} to {second_click} on frame {current_file_index}')
 
-            # Reset para la siguiente anotación
+            # Reset for the next annotation
             first_click = None
             second_click = None
             drawing_box = False
 
-            # Avanzar al siguiente echo después de la anotación
+            # Advance to the next echo after annotation
             advance_to_next_echo()
 
-# Función para avanzar al siguiente 'echo_id'
+# Function to advance to the next 'echo_id'
 def advance_to_next_echo():
     global current_file_index, npy_files, current_echo_id, echo_folder, view, current_index
-    # Reiniciar los clics y el estado
+    # Reset clicks and state
     first_click = None
     second_click = None
     drawing_box = False
     
-    # Avanzar al siguiente echo_id
-    current_file_index = 0  # Reiniciar al primer archivo del siguiente echo
-    plt.clf()  # Limpiar la figura actual
-    plt.close()  # Cerrar la ventana actual para pasar al siguiente echo
+    # Advance to the next echo_id
+    current_file_index = 0  # Reset to the first file of the next echo
+    plt.clf()  # Clear the current figure
+    plt.close()  # Close the current window to move to the next echo
 
-    # Calcular cuántos echo_id quedan por anotar
-    # Obtener los echo_id que ya han sido anotados o descartados
+    # Calculate how many echo_id remain to be annotated
+    # Get the echo_id that have already been annotated or discarded
     annotated_echo_ids = set(annotated_data['echo_id'].unique())
     discarded_echo_ids = set(discarded_data['echo_id'].unique())
     
-    # Conjuntos únicos de echo_id anotados o descartados
+    # Unique sets of annotated or discarded echo_id
     processed_echo_ids = annotated_echo_ids.union(discarded_echo_ids)
     
-    # Restar los echo_id procesados (anotados o descartados) del dataframe filtrado
+    # Subtract the processed echo_id (annotated or discarded) from the filtered dataframe
     remaining_to_annotate = len(filtered_df) - filtered_df['echo_id'].isin(processed_echo_ids).sum()
 
-    print(f"Quedan {remaining_to_annotate} echo_id por anotar")
+    print(f"{remaining_to_annotate} echo_id remain to be annotated")
 
-    # Incrementar el índice global para avanzar al siguiente echo_id
+    # Increment the global index to move to the next echo_id
     while current_index < len(filtered_df):
         row = filtered_df.iloc[current_index]
         current_echo_id = row['echo_id']
         view = row['view_annotation']
         
-        # Verificar si ya se ha anotado el echo_id y view o si ha sido descartado
+        # Check if the echo_id and view have already been annotated or discarded
         if is_echo_annotated(view, current_echo_id):
-            print(f'El echo {current_echo_id} con la vista {view} ya ha sido anotado. Saltando.')
-            current_index += 1  # Saltar al siguiente
-            continue  # Saltar a la siguiente iteración si ya fue anotado
+            print(f'EEcho {current_echo_id} with view {view} has already been annotated. Skipping.')
+            current_index += 1  # Skip to the next
+            continue  # Skip to the next iteration if already annotated
 
         if is_echo_discarded(current_echo_id):
-            print(f'El echo {current_echo_id} ha sido descartado. Saltando.')
-            current_index += 1  # Saltar al siguiente
-            continue  # Saltar si ya fue descartado
+            print(f'The echo {current_echo_id} has been discarded. Skipping.')
+            current_index += 1  # Skip to the next
+            continue  # Skip if already discarded
 
         echo_folder = os.path.join(dataset_path, current_echo_id)
         
         if os.path.isdir(echo_folder):
-            # Obtener todos los archivos .npy de la carpeta
+            # Get all .npy files in the folder
             npy_files = [f for f in os.listdir(echo_folder) if f.endswith('.npy')]
             
             if npy_files:
-                # Mostrar el primer frame (índice 0)
+                # Show the first frame (index 0)
                 current_file_index = 0
                 plt.figure(figsize=(10,8))
                 show_frame()
                 
-                # Conectar los eventos de teclado, clic y movimiento del mouse
+                # Connect keyboard, click, and mouse movement events
                 plt.gcf().canvas.mpl_connect('key_press_event', on_key)
                 plt.gcf().canvas.mpl_connect('button_press_event', on_click)
                 plt.gcf().canvas.mpl_connect('motion_notify_event', on_motion)
                 
-                plt.show()  # Mostrar el gráfico y esperar interacción del usuario
-                current_index += 1  # Avanzar al siguiente echo_id después de procesar este
+                plt.show()  # Show the plot and wait for user interaction
+                current_index += 1  # Move to the next echo_id after processing this one
                 break
             else:
-                print(f'No se encontraron archivos .npy en la carpeta de {current_echo_id}')
+                print(f'No .npy files found in the folder for {current_echo_id}')
         else:
-            print(f'La carpeta para {current_echo_id} no existe en el dataset')
+            print(f'The folder for {current_echo_id} does not exist in the dataset')
         current_index += 1
-# Evento de movimiento del mouse para dibujar la caja interactiva
+# Mouse movement event to draw the interactive box
 def on_motion(event):
     global first_click, drawing_box
     
     if drawing_box and first_click is not None and event.inaxes:
-        plt.clf()  # Limpiar la imagen para actualizar el dibujo de la caja
-        show_frame()  # Mostrar nuevamente el frame actual
+        plt.clf()  # Clear the image to update the box drawing
+        show_frame()  # Show the current frame again
         
-        # Dibujar la caja temporal entre el primer clic y la posición actual del cursor
+        # Draw the temporary box between the first click and the current cursor position
         current_x, current_y = event.xdata, event.ydata
         plt.gca().add_patch(plt.Rectangle(first_click, current_x - first_click[0], current_y - first_click[1], 
                                           fill=False, edgecolor='red', linewidth=2))
         plt.draw()
 
-# Iniciar el proceso con el primer 'echo_id'
+# Start the process with the first 'echo_id'
 advance_to_next_echo()
