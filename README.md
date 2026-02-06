@@ -16,15 +16,13 @@ This project aims to detect the **aortic valve** in echocardiogram images for **
 ---
 
 ### Sample Results
-Below is an example of the model's performance in detecting the aortic valve in different echocardiogram views:
-
-![Aortic Valve Detection](https://github.com/perolope/AoVdetector/blob/master/src/aovdetector.png)
+Below is an example of the model's performance in detecting the aortic valve in different echocardiogram views: ![Aortic Valve Detection](https://github.com/perolope/AoVdetector/blob/master/src/aovdetector.png)
 
 ---
 
 ### Model Weights
 
-Pretrained weights for the best-performing model can be downloaded from Hugging Face:  
+Pretrained weights for the best-performing model can be downloaded from Hugging Face🤗:  
 [AoVdetector](https://huggingface.co/CardiovascularImagingVHIR/AoVdetector)
 
 ---
