@@ -27,7 +27,7 @@ Pretrained weights for the best-performing model can be downloaded from Hugging 
 ---
 
 ## Citation
-If you use this work, please cite ![EchoAVC](https://www.medrxiv.org/content/10.64898/2025.12.26.25343075v1)
+If you use this work, please cite [EchoAVC](https://www.medrxiv.org/content/10.64898/2025.12.26.25343075v1)
 
 ---
 
