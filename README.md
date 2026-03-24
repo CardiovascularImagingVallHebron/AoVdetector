@@ -6,7 +6,7 @@
 
 To run inference using the pretrained model:
 
-1. Download the model weights (`model_aovdetector.pth`) from Hugging Face:  
+1. Download the model weights (`model_aovdetector.pth`) from Hugging Face 🤗:  
    https://huggingface.co/CardiovascularImagingVHIR/AoVdetector
 
 2. Configure the `run_inference.py` script:
