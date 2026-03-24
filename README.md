@@ -16,7 +16,7 @@ To run inference using our weights:
    - `output_csv` (optional): define the path and filename for the output CSV file.
 
 3. Run the script.  
-   The output will be a CSV file containing the detected valve coordinates for each frame.
+   The output will be a CSV file containing the detected valve coordinates for each frame at 256x256 pixel resolution.
 
 ---
 
