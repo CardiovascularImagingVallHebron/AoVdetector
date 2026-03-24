@@ -8,7 +8,7 @@
 
 To run inference using our weights:
 
-1. Download the model weights (`model_aovdetector.pth`) from Hugging Face 🤗 link above.
+1. Download the model weights (`model_aovdetector.pth`) from HuggingFace link above.
 
 2. Configure the `run_inference.py` script:
    - `model_path`: set this to the path of the downloaded `.pth` file.
