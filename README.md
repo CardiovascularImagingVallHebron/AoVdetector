@@ -36,18 +36,8 @@ Below is an example of the model's performance in detecting the aortic valve in 
 
 ---
 
-### Model Weights
-
-Pretrained weights for the best-performing model can be downloaded from Hugging Face🤗: [AoVdetector](https://huggingface.co/CardiovascularImagingVHIR/AoVdetector)
-
----
-
 ## Citation
 If you use this work, please cite [EchoAVC](https://www.medrxiv.org/content/10.64898/2025.12.26.25343075v1)
-
----
-
-**Developed by Pere Lopez-Gutierrez at Vall d'Hebron Institut de Recerca (VHIR), Barcelona, Spain**
 
 ---
 
