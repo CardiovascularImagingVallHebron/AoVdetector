@@ -1,6 +1,10 @@
 # AorticValve Detector
 
-> **Pretrained weights**: Available at 🤗 https://huggingface.co/CardiovascularImagingVHIR/AoVdetector
+<p align="center">
+  <a href="https://www.medrxiv.org/content/10.64898/2025.12.26.25343075v1"><img src="https://img.shields.io/badge/medRxiv-Paper-B31B1B?style=for-the-badge&amp;logo=googlescholar&amp;logoColor=white" alt="medRxiv paper"></a>
+  <a href="https://github.com/perolope/AoVdetector"><img src="https://img.shields.io/badge/GitHub-Code-4A90E2?style=for-the-badge&amp;logo=github&amp;logoColor=white" alt="GitHub code"></a>
+  <a href="https://huggingface.co/CardiovascularImagingVHIR/AoVdetector"><img src="https://img.shields.io/badge/Hugging%20Face-Weights-FFD21E?style=for-the-badge&amp;logo=huggingface&amp;logoColor=white" alt="Hugging Face weights"></a>
+</p>
 
 ---
 
@@ -8,7 +12,7 @@
 
 To run inference using our weights:
 
-1. Download the model weights (`model_aovdetector.pth`) from HuggingFace link above.
+1. Download the model weights (`model_aovdetector.pth`) from the Hugging Face weights link above.
 
 2. Configure the `run_inference.py` script:
    - `model_path`: set this to the path of the downloaded `.pth` file.
